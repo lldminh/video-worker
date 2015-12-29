@@ -35,7 +35,6 @@ public class App {
 
         // start golftec socket server
         new GolftecServer(GTServerConstant.ConfigOption.TcpPort()).run().get();
-        ;
 
 
         log.info("GolfTec Servers Started");

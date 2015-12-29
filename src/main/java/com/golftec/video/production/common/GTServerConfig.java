@@ -99,7 +99,7 @@ public interface GTServerConfig extends Config {
     boolean ProcessTelestrationsOnStartup();
 
     @Key("video-factory-number-of-threads")
-    @DefaultValue("2")
+    @DefaultValue("10")
     int VideoFactoryNumberOfThreads();
 
     @Key("aws-dynamodb-endpoint")

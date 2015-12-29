@@ -1,9 +1,10 @@
 package com.golftec.video.production.networking.handler;
 
-import com.golftec.teaching.model.lesson.TelestrationVideo;
+import com.golftec.teaching.common.GTUtil;
 import com.golftec.video.production.common.GTResponseCode;
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.model.ProcessingTelestration;
+import com.golftec.video.production.model.RequestData;
 import com.golftec.video.production.model.ResponseData;
 import com.golftec.video.production.service.VideoService;
 import com.google.common.base.Strings;
@@ -22,36 +23,24 @@ public class ComposeVideoHandler {
 
     public ResponseData handle(Request req, spark.Response res) {
 
-        Optional<TelestrationVideo> opt = MPJsonUtils.fromJson(req.body(), TelestrationVideo.class);
+        Optional<RequestData> opt = MPJsonUtils.fromJson(req.body(), RequestData.class);
         if (!opt.isPresent()) {
             return new ResponseData(GTResponseCode.NotOk.id, "Request data is empty.");
         }
-        TelestrationVideo telestrationVideo = opt.get();
-        String telestrationId = telestrationVideo.getTelestrationId();
-        if (Strings.isNullOrEmpty(telestrationId)) {
+        RequestData requestData = opt.get();
+        String lessonId = requestData.lessonId;
+        String telestrationId = requestData.telestrationId;
+        if (Strings.isNullOrEmpty(lessonId) || Strings.isNullOrEmpty(telestrationId)) {
             return new ResponseData(GTResponseCode.NotOk.id, "TelestrationVideo is empty.");
         }
         if (ProcessingTelestration.instance().contains(telestrationId)) {
-            return new ResponseData(GTResponseCode.VideoIsProcessing.id, "The TelestrationVideo is processing.");
+            return new ResponseData(GTResponseCode.VideoIsProcessing.id, "The processing is not finished. Please wait util the process done.");
         }
 
-        asyncServiceMethod(telestrationVideo);
+        ProcessingTelestration.instance().add(telestrationId);
+        GTUtil.async(() -> VideoService.composeTelestrationVideo(lessonId, telestrationId));
 
         return new ResponseData(GTResponseCode.Ok.id, "TelestrationVideo is processing.");
     }
 
-    public void asyncServiceMethod(TelestrationVideo telestrationVideo) {
-        Runnable task = new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    VideoService.composeTelestrationVideo(telestrationVideo);
-                } catch (Exception ex) {
-                    log.error("ComposeVideoHandler {}", ex);
-                }
-            }
-        };
-        new Thread(task, "ComposeVideo is starting").start();
-    }
 }

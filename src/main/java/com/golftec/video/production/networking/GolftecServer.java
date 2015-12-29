@@ -29,12 +29,13 @@ public final class GolftecServer {
             try {
                 port(port);
 
+
                 externalStaticFileLocation(".");
 
                 before((req, res) -> {
                     log.info("{} ==> {} {} {}", req.ip(), req.requestMethod(), req.pathInfo(), req.body());
                     res.type("application/json; charset=UTF-8");
-                    res.header("Server", "PPC Backend");
+                    res.header("Server", "Golftec teaching video production");
                     res.header("Access-Control-Allow-Origin", "*");
                 });
 
@@ -46,10 +47,10 @@ public final class GolftecServer {
                 });
 
                 // Method 1
-                post("/mapi/v1/compose-video", new ComposeVideoHandler()::handle, MPJsonUtils::toJson);
-                log.info("PpcHttpServer started, listening on port: {}", port);
+                post("/golftec/map/compose-video", new ComposeVideoHandler()::handle, MPJsonUtils::toJson);
+                log.info("GolftecServer started, listening on port: {}", port);
             } catch (Exception e) {
-                log.error("PpcHttpServer.run: Should not be here, the exception() clause above should be enough.", e);
+                log.error("GolftecServer.run: Should not be here, the exception() clause above should be enough.", e);
             }
         });
     }
