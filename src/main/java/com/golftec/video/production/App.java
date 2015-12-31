@@ -32,6 +32,7 @@ public class App {
         GTServerConstant.ConfigOption = config;
 
         GTServerUtil.initAfterOptionParsed();
+        GTServerUtil.initTelestrationStatus();
 
         // start golftec socket server
         new GolftecServer(GTServerConstant.ConfigOption.TcpPort()).run().get();

@@ -5,7 +5,8 @@ import com.golftec.teaching.model.lesson.TelestrationVideo;
 import com.golftec.teaching.videoUtil.VideoFactoryEx;
 import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTServerUtil;
-import com.golftec.video.production.model.ProcessingTelestration;
+import com.golftec.video.production.data.ComposeStatus;
+import com.golftec.video.production.data.TelestrationStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public final class VideoService {
             boolean isAllLinkedVideosOk = isAllLinksOk(telestrationVideo.getVideoURLs());
             if (!isAllLinkedVideosOk) {
                 log.warn("composeTelestrationVideo Some linked videos are not ok. {}/{}", lessonId, telestrationId);
-                ProcessingTelestration.instance().remove(telestrationId);
+                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
 
@@ -51,7 +52,7 @@ public final class VideoService {
 
             if (!isVideoFactoryProcessOk) {
                 log.warn("composeTelestrationVideo failed. {}/{}", lessonId, telestrationId);
-                ProcessingTelestration.instance().remove(telestrationId);
+                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
 
@@ -69,11 +70,11 @@ public final class VideoService {
 
             if (finalVideoFilePath.toFile().exists()) {
                 log.info("DONE Composing video for telestration {}", telestrationId);
-                ProcessingTelestration.instance().remove(telestrationId);
+                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Succeed.status);
                 return true;
             } else {
                 log.info("No final file found after composing telestration video {}", telestrationId);
-                ProcessingTelestration.instance().remove(telestrationId);
+                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
         } catch (Exception e) {

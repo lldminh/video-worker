@@ -21,5 +21,4 @@ public class VideoServiceTest {
         VideoService videoService = new VideoService();
         videoService.composeTelestrationVideo(lessonId, telestrationId);
     }
-
 }

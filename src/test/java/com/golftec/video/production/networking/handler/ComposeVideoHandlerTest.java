@@ -1,8 +1,8 @@
 package com.golftec.video.production.networking.handler;
 
 import com.golftec.video.production.common.MPJsonUtils;
-import com.golftec.video.production.model.RequestData;
-import com.golftec.video.production.model.ResponseData;
+import com.golftec.video.production.model.ComposeVideoRequestData;
+import com.golftec.video.production.model.ComposeVideoResponseData;
 import com.squareup.okhttp.OkHttpClient;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -23,8 +23,8 @@ public class ComposeVideoHandlerTest extends TestCase {
     @Test
     public void test_composeVideoEmptyObject() {
         init();
-        RequestData requestData = new RequestData();
-        ResponseData responseData = clientAPI.compose(requestData);
+        ComposeVideoRequestData requestData = new ComposeVideoRequestData();
+        ComposeVideoResponseData responseData = clientAPI.compose(requestData);
         assertEquals("TelestrationVideo is empty.", responseData.message);
         clientAPI = null;
     }
@@ -32,10 +32,10 @@ public class ComposeVideoHandlerTest extends TestCase {
     @Test
     public void test_composeVideo() throws IOException {
         init();
-        RequestData requestData = new RequestData();
+        ComposeVideoRequestData requestData = new ComposeVideoRequestData();
         requestData.lessonId = "0791DE3C-532D-40E4-92A8-9E4F4C8451AE";
         requestData.telestrationId = "0D63004C-1853-44CB-B9FC-6EBF63292B29";
-        ResponseData responseData = clientAPI.compose(requestData);
+        ComposeVideoResponseData responseData = clientAPI.compose(requestData);
         assertEquals("TelestrationVideo is processing.", responseData.message);
         clientAPI = null;
     }
@@ -55,6 +55,6 @@ public class ComposeVideoHandlerTest extends TestCase {
 
     interface GTClientAPI {
         @POST("/golftec/map/compose-video")
-        ResponseData compose(@Body() RequestData requestData);
+        ComposeVideoResponseData compose(@Body() ComposeVideoRequestData requestData);
     }
 }

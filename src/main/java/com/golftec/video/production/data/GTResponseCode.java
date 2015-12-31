@@ -1,4 +1,4 @@
-package com.golftec.video.production.common;
+package com.golftec.video.production.data;
 
 import com.google.common.collect.Maps;
 
@@ -11,7 +11,8 @@ public enum GTResponseCode {
     UNKNOWN(-1),
     Ok(0),
     NotOk(1),
-    VideoIsProcessing(2),;
+    VideoIsProcessing(2),
+    VideoIsComposed(3),;
 
     private static final Map<Integer, GTResponseCode> map = Maps.newHashMap();
 

@@ -1,11 +1,13 @@
 package com.golftec.video.production.networking.handler;
 
 import com.golftec.teaching.common.GTUtil;
-import com.golftec.video.production.common.GTResponseCode;
+import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.common.MPJsonUtils;
-import com.golftec.video.production.model.ProcessingTelestration;
-import com.golftec.video.production.model.RequestData;
-import com.golftec.video.production.model.ResponseData;
+import com.golftec.video.production.data.ComposeStatus;
+import com.golftec.video.production.data.GTResponseCode;
+import com.golftec.video.production.data.TelestrationStatus;
+import com.golftec.video.production.model.ComposeVideoRequestData;
+import com.golftec.video.production.model.ComposeVideoResponseData;
 import com.golftec.video.production.service.VideoService;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
@@ -21,26 +23,31 @@ public class ComposeVideoHandler {
 
     private static final Logger log = LoggerFactory.getLogger(ComposeVideoHandler.class);
 
-    public ResponseData handle(Request req, spark.Response res) {
+    public ComposeVideoResponseData handle(Request req, spark.Response res) {
 
-        Optional<RequestData> opt = MPJsonUtils.fromJson(req.body(), RequestData.class);
+        Optional<ComposeVideoRequestData> opt = MPJsonUtils.fromJson(req.body(), ComposeVideoRequestData.class);
         if (!opt.isPresent()) {
-            return new ResponseData(GTResponseCode.NotOk.id, "Request data is empty.");
+            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Request data is empty.");
         }
-        RequestData requestData = opt.get();
+        ComposeVideoRequestData requestData = opt.get();
         String lessonId = requestData.lessonId;
         String telestrationId = requestData.telestrationId;
         if (Strings.isNullOrEmpty(lessonId) || Strings.isNullOrEmpty(telestrationId)) {
-            return new ResponseData(GTResponseCode.NotOk.id, "TelestrationVideo is empty.");
-        }
-        if (ProcessingTelestration.instance().contains(telestrationId)) {
-            return new ResponseData(GTResponseCode.VideoIsProcessing.id, "The processing is not finished. Please wait util the process done.");
+            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "TelestrationVideo is empty.");
         }
 
-        ProcessingTelestration.instance().add(telestrationId);
+        if (GTServerUtil.isTelestrationIsProcessing(telestrationId)) {
+            return new ComposeVideoResponseData(GTResponseCode.VideoIsProcessing.id, "The processing is not finished. Please wait util the process done.");
+        }
+
+        if (!requestData.isForceCompose && GTServerUtil.isTelestrationComposeSucceed(telestrationId)) {
+            return new ComposeVideoResponseData(GTResponseCode.VideoIsComposed.id, "The telestration is composed before.");
+        }
+
+        TelestrationStatus.instance().put(telestrationId, ComposeStatus.Processing.status);
         GTUtil.async(() -> VideoService.composeTelestrationVideo(lessonId, telestrationId));
 
-        return new ResponseData(GTResponseCode.Ok.id, "TelestrationVideo is processing.");
+        return new ComposeVideoResponseData(GTResponseCode.Ok.id, "TelestrationVideo is processing.");
     }
 
 }

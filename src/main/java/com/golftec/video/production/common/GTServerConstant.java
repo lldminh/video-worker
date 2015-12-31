@@ -18,6 +18,7 @@ public final class GTServerConstant {
     public static final String PRO_VIDEO_DIR = "pro-videos";
     public static final String COACH_PRO_VIDEO_PREF_DIR = "coach-pro-video-pref";
     public static final String COACH_DIR = "coach";
+    public static final String TELESTRATION_STATUS_DIR = "telestration-status";
 
     public static GTServerConfig ConfigOption;
     public static String BASE_DATA_DIR = ConfigOption != null ? Paths.get(ConfigOption.DataDir()).toString() : "";
