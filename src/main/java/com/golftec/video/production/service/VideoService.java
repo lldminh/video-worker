@@ -27,6 +27,7 @@ public final class VideoService {
         log.info("Thread [{}]: Composing video for lesson's telestration {}/{}", Thread.currentThread().getId(), lessonId, telestrationId);
 
         try {
+            GTServerUtil.downloadTelestrationVideoJsonFile(lessonId, telestrationId);
             Optional<TelestrationVideo> opTelestration = GTServerUtil.loadTelestrationFromJsonFile(lessonId, telestrationId);
             TelestrationVideo telestrationVideo = opTelestration.get();
             boolean isAllLinkedVideosOk = isAllLinksOk(telestrationVideo.getVideoURLs());
@@ -100,6 +101,4 @@ public final class VideoService {
 
         return true;
     }
-
-
 }

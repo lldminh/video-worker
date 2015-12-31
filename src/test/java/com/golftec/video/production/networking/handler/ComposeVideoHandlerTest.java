@@ -33,8 +33,8 @@ public class ComposeVideoHandlerTest extends TestCase {
     public void test_composeVideo() throws IOException {
         init();
         RequestData requestData = new RequestData();
-        requestData.lessonId = "036B2E81-DBCC-47C9-A598-593AC04B0292";
-        requestData.telestrationId = "F678BE97-BA3D-4ED0-B757-484E0C788FFE";
+        requestData.lessonId = "0791DE3C-532D-40E4-92A8-9E4F4C8451AE";
+        requestData.telestrationId = "0D63004C-1853-44CB-B9FC-6EBF63292B29";
         ResponseData responseData = clientAPI.compose(requestData);
         assertEquals("TelestrationVideo is processing.", responseData.message);
         clientAPI = null;

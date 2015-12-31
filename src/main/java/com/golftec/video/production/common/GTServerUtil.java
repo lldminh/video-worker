@@ -8,6 +8,9 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -40,6 +43,20 @@ public class GTServerUtil {
             return new Response(NotOk.id, "", null, request.methodId, request.requestId);
         }
         return new Response();
+    }
+
+    public static void downloadTelestrationVideoJsonFile(String lessonId, String telestrationId) {
+        try {
+            String relativeURL = GTServerConstant.LESSON_DATA_DIR + "/" + lessonId + "/" + GTServerConstant.LESSON_TELESTRATIONS_DIR_NAME + "/" + telestrationId + "/" + telestrationId + ".json";
+            URL url = new URL(GTServerConstant.ConfigOption.LessonDataFileHost(), relativeURL);
+            final Path jsonFilePath = constructTelestrationJsonFilePath(lessonId, telestrationId);
+            org.apache.commons.io.FileUtils.copyURLToFile(url, jsonFilePath.toFile());
+            log.info("downloadTelestrationVideoJsonFile succeed.");
+        } catch (MalformedURLException e) {
+            log.error("downloadTelestrationVideoJsonFile", e);
+        } catch (IOException e) {
+            log.error("downloadTelestrationVideoJsonFile", e);
+        }
     }
 
     public static Optional<TelestrationVideo> loadTelestrationFromJsonFile(String lessonId, String telestrationId) {
