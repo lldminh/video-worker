@@ -12,7 +12,8 @@ public enum GTResponseCode {
     Ok(0),
     NotOk(1),
     VideoIsProcessing(2),
-    VideoIsComposed(3),;
+    VideoIsComposed(3),
+    ServerBusy(4);
 
     private static final Map<Integer, GTResponseCode> map = Maps.newHashMap();
 

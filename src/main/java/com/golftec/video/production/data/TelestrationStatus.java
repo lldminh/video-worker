@@ -14,7 +14,7 @@ public class TelestrationStatus {
     }
 
 
-    public static Map<String, Integer> instance() {
+    public static Map<String, Integer> get() {
         if (telestrationStatusMap == null) {
             telestrationStatusMap = new HashMap<>();
         }

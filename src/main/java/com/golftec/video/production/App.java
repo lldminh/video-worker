@@ -3,8 +3,13 @@ package com.golftec.video.production;
 import com.golftec.teaching.common.GTUtil;
 import com.golftec.video.production.common.GTServerConfig;
 import com.golftec.video.production.common.GTServerConstant;
+import com.golftec.video.production.common.GTServerFile;
 import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.networking.GolftecServer;
+import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.HttpServerExchange;
+import io.undertow.util.Headers;
 import org.aeonbits.owner.ConfigCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +42,8 @@ public class App {
         // start golftec socket server
         new GolftecServer(GTServerConstant.ConfigOption.TcpPort()).run().get();
 
-
+        //start file server
+        new GTServerFile(GTServerConstant.ConfigOption.FileServerHost(), GTServerConstant.ConfigOption.FileServerPort()).get().start();
         log.info("GolfTec Servers Started");
     }
 }

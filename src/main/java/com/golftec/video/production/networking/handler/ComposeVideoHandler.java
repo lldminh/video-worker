@@ -5,6 +5,7 @@ import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.GTResponseCode;
+import com.golftec.video.production.data.ServerStatus;
 import com.golftec.video.production.data.TelestrationStatus;
 import com.golftec.video.production.model.ComposeVideoRequestData;
 import com.golftec.video.production.model.ComposeVideoResponseData;
@@ -25,15 +26,19 @@ public class ComposeVideoHandler {
 
     public ComposeVideoResponseData handle(Request req, spark.Response res) {
 
+        if(ServerStatus.get()) {
+            return new ComposeVideoResponseData(GTResponseCode.ServerBusy.id, "The other telestration is being composed. Try it later.");
+        }
+
         Optional<ComposeVideoRequestData> opt = MPJsonUtils.fromJson(req.body(), ComposeVideoRequestData.class);
         if (!opt.isPresent()) {
             return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Request data is empty.");
         }
         ComposeVideoRequestData requestData = opt.get();
-        String lessonId = requestData.lessonId;
+        String telestrationVideoUrl = requestData.telestrationVideoUrl;
         String telestrationId = requestData.telestrationId;
-        if (Strings.isNullOrEmpty(lessonId) || Strings.isNullOrEmpty(telestrationId)) {
-            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "TelestrationVideo is empty.");
+        if (Strings.isNullOrEmpty(telestrationVideoUrl) || Strings.isNullOrEmpty(telestrationId)) {
+            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Telestration is empty.");
         }
 
         if (GTServerUtil.isTelestrationIsProcessing(telestrationId)) {
@@ -44,10 +49,10 @@ public class ComposeVideoHandler {
             return new ComposeVideoResponseData(GTResponseCode.VideoIsComposed.id, "The telestration is composed before.");
         }
 
-        TelestrationStatus.instance().put(telestrationId, ComposeStatus.Processing.status);
-        GTUtil.async(() -> VideoService.composeTelestrationVideo(lessonId, telestrationId));
+        TelestrationStatus.get().put(telestrationId, ComposeStatus.Processing.status);
+        GTUtil.async(() -> VideoService.composeTelestrationVideo(telestrationVideoUrl, telestrationId));
 
-        return new ComposeVideoResponseData(GTResponseCode.Ok.id, "TelestrationVideo is processing.");
+        return new ComposeVideoResponseData(GTResponseCode.Ok.id, "The telestration is processing.");
     }
 
 }

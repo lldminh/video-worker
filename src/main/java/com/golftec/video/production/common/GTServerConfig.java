@@ -23,7 +23,7 @@ public interface GTServerConfig extends Config {
     @DefaultValue("1")
     int VideoFactoryNumberOfThreads();
 
-    @Key("lesson-data-file-host")
+    @Key("telestration-data-file-host")
     @DefaultValue("http://54.197.238.74:50003")
     URL LessonDataFileHost();
 
@@ -34,4 +34,12 @@ public interface GTServerConfig extends Config {
     @Key("tcp-port")
     @DefaultValue("40002")
     int TcpPort();
+
+    @Key("file-server-host")
+    @DefaultValue("localhost")
+    String FileServerHost();
+
+    @Key("file-server-port")
+    @DefaultValue("50003")
+    int FileServerPort();
 }

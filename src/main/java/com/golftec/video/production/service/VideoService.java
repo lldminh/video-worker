@@ -24,21 +24,21 @@ public final class VideoService {
 
     private static final Logger log = LoggerFactory.getLogger(VideoService.class);
 
-    public static boolean composeTelestrationVideo(String lessonId, String telestrationId) {
-        log.info("Thread [{}]: Composing video for lesson's telestration {}/{}", Thread.currentThread().getId(), lessonId, telestrationId);
+    public static boolean composeTelestrationVideo(String telestrationVideoUrl, String telestrationId) {
+        log.info("Thread [{}]: Composing video for telestration {}", Thread.currentThread().getId(), telestrationId);
 
         try {
-            GTServerUtil.downloadTelestrationVideoJsonFile(lessonId, telestrationId);
-            Optional<TelestrationVideo> opTelestration = GTServerUtil.loadTelestrationFromJsonFile(lessonId, telestrationId);
+            GTServerUtil.downloadTelestrationVideoJsonFile(telestrationVideoUrl, telestrationId);
+            Optional<TelestrationVideo> opTelestration = GTServerUtil.loadTelestrationFromJsonFile(telestrationId);
             TelestrationVideo telestrationVideo = opTelestration.get();
             boolean isAllLinkedVideosOk = isAllLinksOk(telestrationVideo.getVideoURLs());
             if (!isAllLinkedVideosOk) {
-                log.warn("composeTelestrationVideo Some linked videos are not ok. {}/{}", lessonId, telestrationId);
-                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
+                log.warn("composeTelestrationVideo Some linked videos are not ok. {}", telestrationId);
+                TelestrationStatus.get().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
 
-            final Path finalVideoFilePath = GTServerUtil.constructTelestrationFinalVideoFilePath(lessonId, telestrationId);
+            final Path finalVideoFilePath = GTServerUtil.constructTelestrationFinalVideoFilePath(telestrationId);
             final Path telestrationFinalVideoFolder = finalVideoFilePath.getParent().resolve(GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR);
 
             log.info("composeTelestrationVideo check-mark 1");
@@ -51,8 +51,8 @@ public final class VideoService {
             log.info("composeTelestrationVideo check-mark 3. {}", isVideoFactoryProcessOk);
 
             if (!isVideoFactoryProcessOk) {
-                log.warn("composeTelestrationVideo failed. {}/{}", lessonId, telestrationId);
-                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
+                log.warn("composeTelestrationVideo failed. {}", telestrationId);
+                TelestrationStatus.get().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
 
@@ -70,11 +70,11 @@ public final class VideoService {
 
             if (finalVideoFilePath.toFile().exists()) {
                 log.info("DONE Composing video for telestration {}", telestrationId);
-                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Succeed.status);
+                TelestrationStatus.get().put(telestrationId, ComposeStatus.Succeed.status);
                 return true;
             } else {
                 log.info("No final file found after composing telestration video {}", telestrationId);
-                TelestrationStatus.instance().put(telestrationId, ComposeStatus.Fail.status);
+                TelestrationStatus.get().put(telestrationId, ComposeStatus.Fail.status);
                 return false;
             }
         } catch (Exception e) {
