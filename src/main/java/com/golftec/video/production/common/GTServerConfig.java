@@ -42,4 +42,8 @@ public interface GTServerConfig extends Config {
     @Key("file-server-port")
     @DefaultValue("50003")
     int FileServerPort();
+
+    @Key("transfer-min-size")
+    @DefaultValue("100")
+    int TransferMinSize();
 }

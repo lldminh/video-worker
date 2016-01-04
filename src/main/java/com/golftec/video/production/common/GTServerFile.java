@@ -1,11 +1,13 @@
 package com.golftec.video.production.common;
 
 import io.undertow.Undertow;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
+import io.undertow.server.handlers.resource.PathResourceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.file.Paths;
+
+import static io.undertow.Handlers.resource;
 
 /**
  * Created by ThuPT on 1/3/2016.
@@ -20,13 +22,10 @@ public class GTServerFile {
         log.info("init GTServerFile");
         server = Undertow.builder()
                 .addHttpListener(port, host)
-                .setHandler(new HttpHandler() {
-                    @Override
-                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
-                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                        exchange.getResponseSender().send("Hello World");
-                    }
-                }).build();
+                .setHandler(resource(new PathResourceManager(
+                        Paths.get(GTServerConstant.ConfigOption.DataDir())
+                        , GTServerConstant.ConfigOption.TransferMinSize()))
+                        .setDirectoryListingEnabled(true)).build();
     }
 
     public Undertow get() {

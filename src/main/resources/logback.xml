@@ -1,0 +1,57 @@
+<!-- https://github.com/pedestal/samples/blob/master/template-server/config/logback.xml -->
+<!-- Logback configuration. See http://logback.qos.ch/manual/index.html -->
+<configuration scan="true" scanPeriod="1 hours">
+    <!-- Console output -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder defaults to ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d{HH:mm:ss} %30logger{0} %5level %msg%n</pattern>
+        </encoder>
+        <filter class="com.golftec.video.production.common.GTServerLogFilter"/>
+    </appender>
+
+    <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+        <!-- in the absence of the class attribute, it is assumed that the desired discriminator type is ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+        <discriminator>
+            <key>version</key>
+            <defaultValue>1.2.0</defaultValue>
+        </discriminator>
+        <sift>
+            <appender name="FILE-${version}" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                    <pattern>%d{HH:mm:ss} %30logger{0} %5level %msg%n</pattern>
+                </encoder>
+
+                <file>logs/${version}/${version}.log</file>
+
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <!-- rollover daily -->
+                    <fileNamePattern>logs/${version}/gt-server-${version}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                    <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                        <!-- or whenever the file size reaches 100 MB -->
+                        <maxFileSize>100 MB</maxFileSize>
+
+                        <!-- keep 30 days' worth of history -->
+                        <maxHistory>30</maxHistory>
+                    </timeBasedFileNamingAndTriggeringPolicy>
+
+                    <!-- keep 30 days' worth of history -->
+                    <maxHistory>30</maxHistory>
+                </rollingPolicy>
+            </appender>
+        </sift>
+
+        <filter class="com.golftec.video.production.common.GTServerLogFilter"/>
+    </appender>
+
+    <appender name="async-stdout" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>500</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="STDOUT"/>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="async-stdout"/>
+        <appender-ref ref="SIFT"/>
+    </root>
+</configuration>
