@@ -11,9 +11,10 @@ public enum GTResponseCode {
     UNKNOWN(-1),
     Ok(0),
     NotOk(1),
-    VideoIsProcessing(2),
-    VideoIsComposed(3),
-    ServerBusy(4);
+    TelestrationIsProcessing(2),
+    TelestrationIsComposed(3),
+    ServerBusy(4),
+    TelestrationIsNotProcessed(5);
 
     private static final Map<Integer, GTResponseCode> map = Maps.newHashMap();
 

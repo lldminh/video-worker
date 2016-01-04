@@ -15,7 +15,7 @@ public enum ComposeStatus {
         this.status = status;
     }
 
-    public ComposeStatus get(Integer status) {
+    public static ComposeStatus get(Integer status) {
 
         for (ComposeStatus composeStatus : ComposeStatus.values()) {
             if (composeStatus.status.equals(status)) {

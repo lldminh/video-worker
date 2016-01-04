@@ -33,8 +33,10 @@ public class ComposeVideoHandlerTest extends TestCase {
     public void test_composeVideo() throws IOException {
         init();
         ComposeVideoRequestData requestData = new ComposeVideoRequestData();
-        requestData.telestrationVideoUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.json";
+        requestData.telestrationJsonFileUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.json";
+        requestData.telestrationWavFileUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.wav";
         requestData.telestrationId = "0D63004C-1853-44CB-B9FC-6EBF63292B29";
+        requestData.isForceCompose = true;
         ComposeVideoResponseData responseData = clientAPI.compose(requestData);
         assertEquals("The telestration is processing.", responseData.message);
         clientAPI = null;

@@ -16,9 +16,10 @@ public class VideoServiceTest {
         final GTServerConfig config = ConfigCache.getOrCreate(GTServerConfig.class);
         GTServerConstant.ConfigOption = config;
         GTServerUtil.initAfterOptionParsed();
-        String telestrationVideoUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.json";
+        String telestrationJsonFileUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.json";
+        String telestrationWavFileUrl = "http://54.197.238.74:50003/lesson-data/0791DE3C-532D-40E4-92A8-9E4F4C8451AE/telestrations/0D63004C-1853-44CB-B9FC-6EBF63292B29/0D63004C-1853-44CB-B9FC-6EBF63292B29.json";
         String telestrationId = "0D63004C-1853-44CB-B9FC-6EBF63292B29";
         VideoService videoService = new VideoService();
-        videoService.composeTelestrationVideo(telestrationVideoUrl, telestrationId);
+        videoService.composeTelestrationVideo(telestrationId, telestrationJsonFileUrl, telestrationWavFileUrl);
     }
 }

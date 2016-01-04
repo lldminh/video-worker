@@ -6,6 +6,7 @@ import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.TelestrationStatus;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -38,11 +40,12 @@ public class GTServerUtil {
         GTServerConstant.BASE_COACH_PROVIDEO_PREF_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.COACH_PRO_VIDEO_PREF_DIR).toString();
         GTServerConstant.BASE_COACH_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.COACH_DIR).toString();
         GTServerConstant.DATA_PARENT_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir()).toAbsolutePath().getParent().toString();
+        GTServerConstant.BASE_TELESTRATION_STATUS_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.TELESTRATION_STATUS_DIR).toString();
     }
 
     public static void initTelestrationStatus() {
         try {
-            final Path jsonFilePath = constractTeletestrationStatusFilePath();
+            final Path jsonFilePath = constructTeletestrationStatusFilePath();
             File file = jsonFilePath.toFile();
             if (!file.exists()) {
                 file.getParentFile().mkdir();
@@ -63,17 +66,29 @@ public class GTServerUtil {
     }
 
 
-    public static void downloadTelestrationVideoJsonFile(String telestrationVideoUrl, String telestrationId) {
+    public static void downloadTelestrationJsonFile(String telestrationJsonFileUrl, String telestrationId) {
         try {
-            //String relativeURL = GTServerConstant.LESSON_DATA_DIR + "/" + lessonId + "/" + GTServerConstant.TELESTRATIONS_DIR_NAME + "/" + telestrationId + "/" + telestrationId + ".json";
-            URL url = new URL(telestrationVideoUrl);
+            URL url = new URL(telestrationJsonFileUrl);
             final Path jsonFilePath = constructTelestrationJsonFilePath(telestrationId);
             org.apache.commons.io.FileUtils.copyURLToFile(url, jsonFilePath.toFile());
-            log.info("downloadTelestrationVideoJsonFile succeed.");
+            log.info("downloadTelestrationJsonFile succeed.");
         } catch (MalformedURLException e) {
-            log.error("downloadTelestrationVideoJsonFile", e);
+            log.error("downloadTelestrationJsonFile", e);
         } catch (IOException e) {
-            log.error("downloadTelestrationVideoJsonFile", e);
+            log.error("downloadTelestrationJsonFile", e);
+        }
+    }
+
+    public static void downloadTelestrationWavFile(String telestrationWavFileUrl, String telestrationId) {
+        try {
+            URL url = new URL(telestrationWavFileUrl);
+            final Path jsonFilePath = constructTelestrationWavFilePath(telestrationId);
+            org.apache.commons.io.FileUtils.copyURLToFile(url, jsonFilePath.toFile());
+            log.info("downloadTelestrationWavFile succeed.");
+        } catch (MalformedURLException e) {
+            log.error("downloadTelestrationWavFile", e);
+        } catch (IOException e) {
+            log.error("downloadTelestrationWavFile", e);
         }
     }
 
@@ -93,12 +108,16 @@ public class GTServerUtil {
         return Paths.get(GTServerConstant.BASE_TELESTRATION_DATA_DIR, telestrationId, telestrationId + ".json");
     }
 
+    public static Path constructTelestrationWavFilePath(String telestrationId) {
+        return Paths.get(GTServerConstant.BASE_TELESTRATION_DATA_DIR, telestrationId, telestrationId + ".wav");
+    }
+
     public static Path constructTelestrationFinalVideoFilePath(String telestrationId) {
         return Paths.get(GTServerConstant.BASE_TELESTRATION_DATA_DIR, telestrationId, telestrationId + ".mp4");
     }
 
-    public static Path constractTeletestrationStatusFilePath() {
-        return Paths.get(GTServerConstant.TELESTRATION_STATUS_DIR, "telestration-status.json");
+    public static Path constructTeletestrationStatusFilePath() {
+        return Paths.get(GTServerConstant.BASE_TELESTRATION_STATUS_DIR, "telestration-status.json");
     }
 
     public static boolean isTelestrationIsProcessing(String telestrationId) {
@@ -119,9 +138,26 @@ public class GTServerUtil {
         return isProcess;
     }
 
-    public static void updateTelestrationStatus() {
+    public static Path constructTelestrationOutputFilePath(String telestrationId) {
+        return Paths.get(GTServerConstant.TELESTRATIONS_DIR_NAME, telestrationId, GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR, GTServerConstant.TELESTRATION_OUT_FILE);
+    }
+
+    public static String constructDownloadLink(String path) throws URISyntaxException {
+
+        StringBuilder url = (new StringBuilder()).append("http://")
+                .append(GTServerConstant.ConfigOption.FileServerHost())
+                .append(":")
+                .append(GTServerConstant.ConfigOption.FileServerPort())
+                .append("/")
+                .append(StringUtils.replace(path, "\\", "/"));
+        return url.toString();
+    }
+
+
+    public static void updateTelestrationStatus(String telestrationId, Integer status) {
         try {
-            final Path jsonFilePath = constractTeletestrationStatusFilePath();
+            TelestrationStatus.get().put(telestrationId, status);
+            final Path jsonFilePath = constructTeletestrationStatusFilePath();
             File file = jsonFilePath.toFile();
             String content = GTUtil.toJson(TelestrationStatus.get());
             FileUtils.deleteQuietly(file);
