@@ -1,15 +1,11 @@
 package com.golftec.video.production;
 
 import com.golftec.teaching.common.GTUtil;
-import com.golftec.video.production.common.GTServerConfig;
+import com.golftec.video.production.common.GTVideoProductionConfig;
 import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTServerFile;
 import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.networking.GolftecServer;
-import io.undertow.Undertow;
-import io.undertow.server.HttpHandler;
-import io.undertow.server.HttpServerExchange;
-import io.undertow.util.Headers;
 import org.aeonbits.owner.ConfigCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +28,7 @@ public class App {
         log.debug("System.getProperty(\"java.class.path\"): {}", System.getProperty("java.class.path"));
 
         //Set values get from file .properties into ConfigOption
-        final GTServerConfig config = ConfigCache.getOrCreate(GTServerConfig.class);
+        final GTVideoProductionConfig config = ConfigCache.getOrCreate(GTVideoProductionConfig.class);
         log.info("Configuration parsed: {}", config);
         GTServerConstant.ConfigOption = config;
 

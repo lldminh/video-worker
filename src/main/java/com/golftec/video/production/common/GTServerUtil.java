@@ -46,9 +46,11 @@ public class GTServerUtil {
     public static void initTelestrationStatus() {
         try {
             final Path jsonFilePath = constructTeletestrationStatusFilePath();
+            log.info("initTelestrationStatus file path: {}", jsonFilePath.toString());
             File file = jsonFilePath.toFile();
             if (!file.exists()) {
-                file.getParentFile().mkdir();
+                log.info("initTelestrationStatus file does not exist, create file path: {}", jsonFilePath.toString());
+                file.getParentFile().mkdirs();
                 file.createNewFile();
             }
             final String json = FileUtils.readFileToString(file, StandardCharsets.UTF_8);

@@ -1,3 +1,5 @@
 syntax: glob
-golftec-teaching-video-production.iml
+logs/
 target/
+temp/
+golftec-teaching-video-production.iml

@@ -94,4 +94,26 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>tsg-video-production</finalName>
+        <plugins>
+            <plugin>
+                <groupId>com.github.chrischristo</groupId>
+                <artifactId>capsule-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <appClass>com.golftec.video.production.App</appClass>
+                            <chmod>true</chmod>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

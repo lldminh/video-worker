@@ -12,12 +12,12 @@ import java.util.concurrent.TimeUnit;
  * Copy by Minh on 2015-12-18
  */
 @Config.HotReload(value = 1, unit = TimeUnit.MINUTES)
-@LoadPolicy(LoadType.FIRST)
+@LoadPolicy(LoadType.MERGE)
 @Config.Sources({
-        "file:local_teaching_video_production.properties",
-        "file:./golftec_teaching_video_production.properties",
+        "file:video-production-local.properties",
+        "file:./video-production.properties",
 })
-public interface GTServerConfig extends Config {
+public interface GTVideoProductionConfig extends Config {
 
     @Key("video-factory-number-of-threads")
     @DefaultValue("1")
