@@ -25,39 +25,39 @@ public class ComposeVideoHandler {
 
     public ComposeVideoResponseData handle(Request req, spark.Response res) {
 
-        if(ServerStatus.isBusy()) {
-            return new ComposeVideoResponseData(GTResponseCode.ServerBusy.id, "The other telestration is being composed. Try it later.");
+        if (ServerStatus.isBusy()) {
+            return new ComposeVideoResponseData(GTResponseCode.ServerBusy.id, "The telestration " + ServerStatus.getCurrentCompose() + " is being composed. Please try it later.", ServerStatus.getCurrentCompose());
         }
 
         Optional<ComposeVideoRequestData> opt = MPJsonUtils.fromJson(req.body(), ComposeVideoRequestData.class);
         if (!opt.isPresent()) {
-            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Request data is empty.");
+            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Request data is empty.", ServerStatus.getCurrentCompose());
         }
         ComposeVideoRequestData requestData = opt.get();
         String telestrationJsonFileUrl = requestData.telestrationJsonFileUrl;
         String telestrationWavFileUrl = requestData.telestrationWavFileUrl;
         String telestrationId = requestData.telestrationId;
         if (Strings.isNullOrEmpty(telestrationJsonFileUrl) || Strings.isNullOrEmpty(telestrationId) || Strings.isNullOrEmpty(telestrationWavFileUrl)) {
-            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Invalid request data.");
+            return new ComposeVideoResponseData(GTResponseCode.NotOk.id, "Invalid request data.", ServerStatus.getCurrentCompose());
         }
 
 
         //forcing: restart compose
-        if (!requestData.isForceCompose && GTVideoProductionUtil.isTelestrationIsProcessing(telestrationId)) {
-            return new ComposeVideoResponseData(GTResponseCode.TelestrationIsProcessing.id, "The processing is not finished. Please wait util the process done.");
+        if (!requestData.isForceCompose && GTServerUtil.isTelestrationIsProcessing(telestrationId)) {
+            return new ComposeVideoResponseData(GTResponseCode.TelestrationIsProcessing.id, "The processing is not finished. Please wait util the process done.", ServerStatus.getCurrentCompose());
         }
 
         //forcing: restart compose
         if (!requestData.isForceCompose && GTVideoProductionUtil.isTelestrationComposeSucceed(telestrationId)) {
-            return new ComposeVideoResponseData(GTResponseCode.TelestrationIsComposed.id, "The telestration is composed before.");
+            return new ComposeVideoResponseData(GTResponseCode.TelestrationIsComposed.id, "The telestration is composed before.", ServerStatus.getCurrentCompose());
         }
 
         //set server to busy
-        ServerStatus.setBusy();
+        ServerStatus.setBusy(telestrationId);
         GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Processing.status);
         GTUtil.async(() -> VideoService.composeTelestrationVideo(telestrationId, telestrationJsonFileUrl, telestrationWavFileUrl));
 
-        return new ComposeVideoResponseData(GTResponseCode.Ok.id, "The telestration is processing.");
+        return new ComposeVideoResponseData(GTResponseCode.Ok.id, "The telestration is processing.", ServerStatus.getCurrentCompose());
     }
 
 }

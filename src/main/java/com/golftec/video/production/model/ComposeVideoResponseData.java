@@ -7,9 +7,11 @@ public class ComposeVideoResponseData {
 
     public int status;
     public String message;
+    public String currentCompose;
 
-    public ComposeVideoResponseData(int status, String message) {
+    public ComposeVideoResponseData(int status, String message, String currentCompose) {
         this.status = status;
         this.message = message;
+        this.currentCompose = currentCompose;
     }
 }
