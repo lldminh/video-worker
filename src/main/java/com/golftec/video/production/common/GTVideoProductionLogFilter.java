@@ -7,7 +7,7 @@ import ch.qos.logback.core.spi.FilterReply;
 /**
  * Created by Hoang on 2014-08-09.
  */
-public class GTServerLogFilter extends Filter<ILoggingEvent> {
+public class GTVideoProductionLogFilter extends Filter<ILoggingEvent> {
 
     @Override
     public FilterReply decide(ILoggingEvent event) {
