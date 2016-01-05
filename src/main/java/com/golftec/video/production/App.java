@@ -1,10 +1,10 @@
 package com.golftec.video.production;
 
 import com.golftec.teaching.common.GTUtil;
-import com.golftec.video.production.common.GTVideoProductionConfig;
 import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTServerFile;
 import com.golftec.video.production.common.GTServerUtil;
+import com.golftec.video.production.common.GTVideoProductionConfig;
 import com.golftec.video.production.networking.GolftecServer;
 import org.aeonbits.owner.ConfigCache;
 import org.slf4j.Logger;

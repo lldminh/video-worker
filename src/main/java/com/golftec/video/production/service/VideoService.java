@@ -6,6 +6,7 @@ import com.golftec.teaching.videoUtil.VideoFactoryEx;
 import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.data.ComposeStatus;
+import com.golftec.video.production.data.ServerStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,6 +51,7 @@ public final class VideoService {
             if (!isVideoFactoryProcessOk) {
                 log.warn("composeTelestrationVideo failed. {}", telestrationId);
                 GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
+                ServerStatus.setFree();
                 return false;
             }
 
@@ -68,10 +70,12 @@ public final class VideoService {
             if (finalVideoFilePath.toFile().exists()) {
                 log.info("DONE Composing video for telestration {}", telestrationId);
                 GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Succeed.status);
+                ServerStatus.setFree();
                 return true;
             } else {
                 log.info("No final file found after composing telestration video {}", telestrationId);
                 GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
+                ServerStatus.setFree();
                 return false;
             }
         } catch (Exception e) {

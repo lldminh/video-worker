@@ -73,7 +73,7 @@ public class GTServerUtil {
             URL url = new URL(telestrationJsonFileUrl);
             final Path jsonFilePath = constructTelestrationJsonFilePath(telestrationId);
             org.apache.commons.io.FileUtils.copyURLToFile(url, jsonFilePath.toFile());
-            log.info("downloadTelestrationJsonFile succeed.");
+            log.info("downloadTelestrationJsonFile to {} succeed.", jsonFilePath);
         } catch (MalformedURLException e) {
             log.error("downloadTelestrationJsonFile", e);
         } catch (IOException e) {
@@ -86,7 +86,7 @@ public class GTServerUtil {
             URL url = new URL(telestrationWavFileUrl);
             final Path jsonFilePath = constructTelestrationWavFilePath(telestrationId);
             org.apache.commons.io.FileUtils.copyURLToFile(url, jsonFilePath.toFile());
-            log.info("downloadTelestrationWavFile succeed.");
+            log.info("downloadTelestrationWavFile to {} succeed.", jsonFilePath);
         } catch (MalformedURLException e) {
             log.error("downloadTelestrationWavFile", e);
         } catch (IOException e) {

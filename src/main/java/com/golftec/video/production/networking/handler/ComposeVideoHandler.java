@@ -25,7 +25,7 @@ public class ComposeVideoHandler {
 
     public ComposeVideoResponseData handle(Request req, spark.Response res) {
 
-        if(ServerStatus.get()) {
+        if(ServerStatus.isBusy()) {
             return new ComposeVideoResponseData(GTResponseCode.ServerBusy.id, "The other telestration is being composed. Try it later.");
         }
 
@@ -52,6 +52,8 @@ public class ComposeVideoHandler {
             return new ComposeVideoResponseData(GTResponseCode.TelestrationIsComposed.id, "The telestration is composed before.");
         }
 
+        //set server to busy
+        ServerStatus.setBusy();
         GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Processing.status);
         GTUtil.async(() -> VideoService.composeTelestrationVideo(telestrationId, telestrationJsonFileUrl, telestrationWavFileUrl));
 

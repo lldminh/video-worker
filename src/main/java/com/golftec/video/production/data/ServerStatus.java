@@ -4,16 +4,17 @@ package com.golftec.video.production.data;
  * Created by ThuPT on 12/31/2015.
  */
 public class ServerStatus {
-    private static Boolean isBusy;
+    private static boolean isBusy = false;
 
-    private ServerStatus() {
+    public static boolean isBusy() {
+        return isBusy;
     }
 
+    public static void setBusy() {
+        isBusy = true;
+    }
 
-    public static Boolean get() {
-        if (isBusy == null) {
-            isBusy = new Boolean(false);
-        }
-        return isBusy;
+    public static void setFree() {
+        isBusy = false;
     }
 }
