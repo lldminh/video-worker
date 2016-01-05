@@ -43,7 +43,7 @@ public class ComposeVideoHandler {
 
 
         //forcing: restart compose
-        if (!requestData.isForceCompose && GTServerUtil.isTelestrationIsProcessing(telestrationId)) {
+        if (!requestData.isForceCompose && GTVideoProductionUtil.isTelestrationIsProcessing(telestrationId)) {
             return new ComposeVideoResponseData(GTResponseCode.TelestrationIsProcessing.id, "The processing is not finished. Please wait util the process done.", ServerStatus.getCurrentCompose());
         }
 
