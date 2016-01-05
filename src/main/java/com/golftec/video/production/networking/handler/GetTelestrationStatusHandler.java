@@ -1,6 +1,6 @@
 package com.golftec.video.production.networking.handler;
 
-import com.golftec.video.production.common.GTServerUtil;
+import com.golftec.video.production.common.GTVideoProductionUtil;
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.GTResponseCode;
@@ -56,8 +56,8 @@ public class GetTelestrationStatusHandler {
 
         switch (ComposeStatus.get(status)) {
             case Succeed:
-                Path path = GTServerUtil.constructTelestrationOutputFilePath(telestrationId);
-                String url = GTServerUtil.constructDownloadLink(path.toString());
+                Path path = GTVideoProductionUtil.constructTelestrationOutputFilePath(telestrationId);
+                String url = GTVideoProductionUtil.constructDownloadLink(path.toString());
                 return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is composed successfully.", url);
             case Fail:
                 return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is composed fail.", "");

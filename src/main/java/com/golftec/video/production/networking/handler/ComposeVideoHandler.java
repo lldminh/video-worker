@@ -1,7 +1,7 @@
 package com.golftec.video.production.networking.handler;
 
 import com.golftec.teaching.common.GTUtil;
-import com.golftec.video.production.common.GTServerUtil;
+import com.golftec.video.production.common.GTVideoProductionUtil;
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.GTResponseCode;
@@ -43,18 +43,18 @@ public class ComposeVideoHandler {
 
 
         //forcing: restart compose
-        if (!requestData.isForceCompose && GTServerUtil.isTelestrationIsProcessing(telestrationId)) {
+        if (!requestData.isForceCompose && GTVideoProductionUtil.isTelestrationIsProcessing(telestrationId)) {
             return new ComposeVideoResponseData(GTResponseCode.TelestrationIsProcessing.id, "The processing is not finished. Please wait util the process done.");
         }
 
         //forcing: restart compose
-        if (!requestData.isForceCompose && GTServerUtil.isTelestrationComposeSucceed(telestrationId)) {
+        if (!requestData.isForceCompose && GTVideoProductionUtil.isTelestrationComposeSucceed(telestrationId)) {
             return new ComposeVideoResponseData(GTResponseCode.TelestrationIsComposed.id, "The telestration is composed before.");
         }
 
         //set server to busy
         ServerStatus.setBusy();
-        GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Processing.status);
+        GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Processing.status);
         GTUtil.async(() -> VideoService.composeTelestrationVideo(telestrationId, telestrationJsonFileUrl, telestrationWavFileUrl));
 
         return new ComposeVideoResponseData(GTResponseCode.Ok.id, "The telestration is processing.");

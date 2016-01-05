@@ -4,7 +4,6 @@ import org.aeonbits.owner.Config;
 import org.aeonbits.owner.Config.LoadPolicy;
 import org.aeonbits.owner.Config.LoadType;
 
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,25 +22,21 @@ public interface GTVideoProductionConfig extends Config {
     @DefaultValue("1")
     int VideoFactoryNumberOfThreads();
 
-    @Key("telestration-data-file-host")
-    @DefaultValue("http://54.197.238.74:50003")
-    URL LessonDataFileHost();
-
     @Key("data-dir")
     @DefaultValue("temp")
     String DataDir();
 
     @Key("tcp-port")
-    @DefaultValue("40002")
+    @DefaultValue("50006")
     int TcpPort();
 
-    @Key("file-server-host")
+    @Key("worker-file-server-host")
     @DefaultValue("localhost")
-    String FileServerHost();
+    String workerFileServerHost();
 
-    @Key("file-server-port")
-    @DefaultValue("50003")
-    int FileServerPort();
+    @Key("worker-file-server-port")
+    @DefaultValue("50007")
+    int workerFileServerPort();
 
     @Key("transfer-min-size")
     @DefaultValue("100")

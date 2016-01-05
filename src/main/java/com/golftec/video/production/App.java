@@ -3,8 +3,8 @@ package com.golftec.video.production;
 import com.golftec.teaching.common.GTUtil;
 import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTServerFile;
-import com.golftec.video.production.common.GTServerUtil;
 import com.golftec.video.production.common.GTVideoProductionConfig;
+import com.golftec.video.production.common.GTVideoProductionUtil;
 import com.golftec.video.production.networking.GolftecServer;
 import org.aeonbits.owner.ConfigCache;
 import org.slf4j.Logger;
@@ -32,14 +32,14 @@ public class App {
         log.info("Configuration parsed: {}", config);
         GTServerConstant.ConfigOption = config;
 
-        GTServerUtil.initAfterOptionParsed();
-        GTServerUtil.initTelestrationStatus();
+        GTVideoProductionUtil.initAfterOptionParsed();
+        GTVideoProductionUtil.initTelestrationStatus();
 
         // start golftec socket server
         new GolftecServer(GTServerConstant.ConfigOption.TcpPort()).run().get();
 
         //start file server
-        new GTServerFile(GTServerConstant.ConfigOption.FileServerHost(), GTServerConstant.ConfigOption.FileServerPort()).get().start();
+        new GTServerFile(GTServerConstant.ConfigOption.workerFileServerHost(), GTServerConstant.ConfigOption.workerFileServerPort()).get().start();
         log.info("GolfTec Servers Started");
     }
 }

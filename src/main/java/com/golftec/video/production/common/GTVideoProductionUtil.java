@@ -25,9 +25,9 @@ import java.util.Optional;
 /**
  * Created by ThuPT on 12/28/2015.
  */
-public class GTServerUtil {
+public class GTVideoProductionUtil {
 
-    private static final Logger log = LoggerFactory.getLogger(GTServerUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(GTVideoProductionUtil.class);
 
 
     public static void initAfterOptionParsed() {
@@ -147,11 +147,11 @@ public class GTServerUtil {
     public static String constructDownloadLink(String path) throws URISyntaxException {
 
         StringBuilder url = (new StringBuilder()).append("http://")
-                .append(GTServerConstant.ConfigOption.FileServerHost())
-                .append(":")
-                .append(GTServerConstant.ConfigOption.FileServerPort())
-                .append("/")
-                .append(StringUtils.replace(path, "\\", "/"));
+                                                 .append(GTServerConstant.ConfigOption.workerFileServerHost())
+                                                 .append(":")
+                                                 .append(GTServerConstant.ConfigOption.workerFileServerPort())
+                                                 .append("/")
+                                                 .append(StringUtils.replace(path, "\\", "/"));
         return url.toString();
     }
 

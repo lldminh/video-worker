@@ -4,7 +4,7 @@ import com.golftec.teaching.common.GTUtil;
 import com.golftec.teaching.model.lesson.TelestrationVideo;
 import com.golftec.teaching.videoUtil.VideoFactoryEx;
 import com.golftec.video.production.common.GTServerConstant;
-import com.golftec.video.production.common.GTServerUtil;
+import com.golftec.video.production.common.GTVideoProductionUtil;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.ServerStatus;
 import org.slf4j.Logger;
@@ -28,16 +28,16 @@ public final class VideoService {
         log.info("Thread [{}]: Composing video for telestration {}", Thread.currentThread().getId(), telestrationId);
 
         try {
-            GTServerUtil.downloadTelestrationJsonFile(telestrationJsonFileUrl, telestrationId);
-            GTServerUtil.downloadTelestrationWavFile(telestrationWavFileUrl, telestrationId);
-            Optional<TelestrationVideo> opTelestration = GTServerUtil.loadTelestrationFromJsonFile(telestrationId);
+            GTVideoProductionUtil.downloadTelestrationJsonFile(telestrationJsonFileUrl, telestrationId);
+            GTVideoProductionUtil.downloadTelestrationWavFile(telestrationWavFileUrl, telestrationId);
+            Optional<TelestrationVideo> opTelestration = GTVideoProductionUtil.loadTelestrationFromJsonFile(telestrationId);
             TelestrationVideo telestrationVideo = opTelestration.get();
 
-            final Path finalVideoFilePath = GTServerUtil.constructTelestrationFinalVideoFilePath(telestrationId);
+            final Path finalVideoFilePath = GTVideoProductionUtil.constructTelestrationFinalVideoFilePath(telestrationId);
             final Path telestrationFinalVideoFolder = finalVideoFilePath.getParent().resolve(GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR);
 
             //reset soundfilepath
-            telestrationVideo.setSoundFilePath(GTServerUtil.constructTelestrationWavFilePath(telestrationId).toString());
+            telestrationVideo.setSoundFilePath(GTVideoProductionUtil.constructTelestrationWavFilePath(telestrationId).toString());
 
             log.info("composeTelestrationVideo check-mark 1");
             VideoFactoryEx videoFactoryEx = new VideoFactoryEx(telestrationVideo);
@@ -50,7 +50,7 @@ public final class VideoService {
 
             if (!isVideoFactoryProcessOk) {
                 log.warn("composeTelestrationVideo failed. {}", telestrationId);
-                GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
+                GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
                 ServerStatus.setFree();
                 return false;
             }
@@ -69,12 +69,12 @@ public final class VideoService {
 
             if (finalVideoFilePath.toFile().exists()) {
                 log.info("DONE Composing video for telestration {}", telestrationId);
-                GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Succeed.status);
+                GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Succeed.status);
                 ServerStatus.setFree();
                 return true;
             } else {
                 log.info("No final file found after composing telestration video {}", telestrationId);
-                GTServerUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
+                GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Fail.status);
                 ServerStatus.setFree();
                 return false;
             }
