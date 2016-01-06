@@ -5,12 +5,12 @@ package com.golftec.video.production.model;
  */
 public class ComposeVideoResponseData {
 
-    public int status;
+    public int code;
     public String message;
     public String currentCompose;
 
-    public ComposeVideoResponseData(int status, String message, String currentCompose) {
-        this.status = status;
+    public ComposeVideoResponseData(int code, String message, String currentCompose) {
+        this.code = code;
         this.message = message;
         this.currentCompose = currentCompose;
     }

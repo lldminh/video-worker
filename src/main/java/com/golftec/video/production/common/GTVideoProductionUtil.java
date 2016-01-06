@@ -122,10 +122,14 @@ public class GTVideoProductionUtil {
         return Paths.get(GTServerConstant.BASE_TELESTRATION_STATUS_DIR, "telestration-status.json");
     }
 
+    public static Path constructTeletestrationFilePath(String telestrationId) {
+        return Paths.get(GTServerConstant.BASE_TELESTRATION_DATA_DIR, telestrationId);
+    }
+
     public static boolean isTelestrationIsProcessing(String telestrationId) {
         boolean isProcess = false;
         Integer status = TelestrationStatus.get().get(telestrationId);
-        if (status != null && ComposeStatus.Processing.status.equals(status)) {
+        if (status != null && ComposeStatus.Composing.status.equals(status)) {
             isProcess = true;
         }
         return isProcess;
@@ -167,6 +171,34 @@ public class GTVideoProductionUtil {
         } catch (IOException e) {
             log.error("updateTelestrationStatus", e);
         }
+    }
+
+    public static void refreshTelestrationStatusFile() {
+        try {
+            final Path jsonFilePath = constructTeletestrationStatusFilePath();
+            File file = jsonFilePath.toFile();
+            String content = GTUtil.toJson(TelestrationStatus.get());
+            FileUtils.deleteQuietly(file);
+            FileUtils.writeStringToFile(file, content, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            log.error("updateTelestrationStatus", e);
+        }
+    }
+
+    public static boolean deleteTelestrationOutputLocalFile(String telestrationId) {
+        try {
+            Path telestrationFilePath = constructTeletestrationFilePath(telestrationId);
+            File file = telestrationFilePath.toFile();
+            FileUtils.deleteDirectory(file);
+            if (file.exists()) {
+                return false;
+            } else {
+                return true;
+            }
+        } catch (IOException e) {
+            log.error("deleteTelestrationOutputLocalFile", e);
+        }
+        return false;
     }
 
 }

@@ -51,18 +51,18 @@ public class GetTelestrationStatusHandler {
         Integer status = TelestrationStatus.get().get(telestrationId);
 
         if (status == null) {
-            return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is not processed.", "");
+            return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotComposed.id, "TelestrationId is not composed.", "");
         }
 
         switch (ComposeStatus.get(status)) {
             case Succeed:
                 Path path = GTVideoProductionUtil.constructTelestrationOutputFilePath(telestrationId);
                 String url = GTVideoProductionUtil.constructDownloadLink(path.toString());
-                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is composed successfully.", url);
+                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsComposedSuccess.id, "TelestrationId is composed successfully.", url);
             case Fail:
-                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is composed fail.", "");
-            case Processing:
-                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsNotProcessed.id, "TelestrationId is processing.", "");
+                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsComposedFail.id, "TelestrationId is composed fail.", "");
+            case Composing:
+                return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsComposing.id, "TelestrationId is being composed.", "");
         }
 
         return null;

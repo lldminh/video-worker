@@ -7,7 +7,7 @@ public enum ComposeStatus {
     Unknown(-1),
     Succeed(0),
     Fail(1),
-    Processing(2);
+    Composing(2);
 
     public Integer status;
 

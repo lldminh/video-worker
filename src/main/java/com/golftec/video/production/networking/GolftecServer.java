@@ -3,6 +3,7 @@ package com.golftec.video.production.networking;
 
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.networking.handler.ComposeVideoHandler;
+import com.golftec.video.production.networking.handler.DeleteTelestrationOutputHandler;
 import com.golftec.video.production.networking.handler.GetTelestrationStatusHandler;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
@@ -51,6 +52,8 @@ public final class GolftecServer {
                 post("/golftec/map/compose-video", new ComposeVideoHandler()::handle, MPJsonUtils::toJson);
                 //get telestration status
                 post("/golftec/map/get-telestration-status", new GetTelestrationStatusHandler()::handle, MPJsonUtils::toJson);
+                //delete telestration ouput
+                post("/golftec/map/delete-telestration-output", new DeleteTelestrationOutputHandler()::handle, MPJsonUtils::toJson);
                 log.info("GolftecServer started, listening on port: {}", port);
             } catch (Exception e) {
                 log.error("GolftecServer.run: Should not be here, the exception() clause above should be enough.", e);
