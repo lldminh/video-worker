@@ -1,9 +1,7 @@
 package com.golftec.video.production.networking.handler;
 
 import com.golftec.video.production.data.GTResponseCode;
-import com.golftec.video.production.model.ComposeVideoRequestData;
-import com.golftec.video.production.model.DeleteTelestrationOutputRequestData;
-import com.golftec.video.production.model.DeleteTelestrationOutputResponseData;
+import com.golftec.video.production.model.*;
 import org.junit.Test;
 
 /**
@@ -63,6 +61,18 @@ public class DeleteTelestrationOutputHandlerTest extends BaseHandlerTest {
         DeleteTelestrationOutputResponseData responseDeleteData = clientAPI.deleteTelestrationOutput(requestDeleteData);
         assertEquals(GTResponseCode.Ok.id, responseDeleteData.code);
         assertEquals("", responseDeleteData.errorMessage);
+        clientAPI = null;
+    }
+
+    @Test
+    public void test_getTelestration() {
+        init();
+
+        GetTelestrationStatusRequestData resquestData = new GetTelestrationStatusRequestData();
+        resquestData.telestrationId = "0D63004C-1853-44CB-B9FC-6EBF63292B29";
+
+        GetTelestrationStatusResponseData responseData = clientAPI.getTelestationStatus(resquestData);
+        assertNotNull(responseData);
         clientAPI = null;
     }
 

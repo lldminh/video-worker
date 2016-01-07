@@ -1,10 +1,7 @@
 package com.golftec.video.production.networking.handler;
 
 import com.golftec.video.production.common.MPJsonUtils;
-import com.golftec.video.production.model.ComposeVideoRequestData;
-import com.golftec.video.production.model.ComposeVideoResponseData;
-import com.golftec.video.production.model.DeleteTelestrationOutputRequestData;
-import com.golftec.video.production.model.DeleteTelestrationOutputResponseData;
+import com.golftec.video.production.model.*;
 import com.squareup.okhttp.OkHttpClient;
 import junit.framework.TestCase;
 import retrofit.RestAdapter;
@@ -37,5 +34,8 @@ public class BaseHandlerTest extends TestCase {
 
         @POST("/golftec/map/delete-telestration-output")
         DeleteTelestrationOutputResponseData deleteTelestrationOutput(@Body() DeleteTelestrationOutputRequestData requestData);
+
+        @POST("/golftec/map/get-telestration-status")
+        GetTelestrationStatusResponseData getTelestationStatus(@Body() GetTelestrationStatusRequestData requestData);
     }
 }
