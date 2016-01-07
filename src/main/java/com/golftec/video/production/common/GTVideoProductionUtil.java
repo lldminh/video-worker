@@ -60,11 +60,27 @@ public class GTVideoProductionUtil {
             if (statusMap != null) {
                 TelestrationStatus.get().putAll(statusMap);
             }
+            clearComposingTelestrationAfterInit();
         } catch (IOException e) {
             log.warn("Error while initTelestrationStatus", e);
         } catch (Exception e) {
             log.warn("Error while initTelestrationStatus", e);
         }
+    }
+
+    private static void clearComposingTelestrationAfterInit() {
+        for (String telestrationId : TelestrationStatus.get().keySet()) {
+            if (ComposeStatus.get(TelestrationStatus.get().get(telestrationId)) == ComposeStatus.Composing) {
+                boolean isDeleted = deleteTelestrationOutputLocalFile(telestrationId);
+                if (isDeleted) {
+                    log.info("clearComposingTelestrationAfterInit: composing telestration {} is deleted.", telestrationId);
+                    TelestrationStatus.get().remove(telestrationId);
+                } else {
+                    log.error("clearComposingTelestrationAfterInit: Cannot delete composing telestration {}", telestrationId);
+                }
+            }
+        }
+        refreshTelestrationStatusFile();
     }
 
 
