@@ -26,6 +26,7 @@ public class GTServerFile {
                         Paths.get(GTServerConstant.ConfigOption.DataDir())
                         , GTServerConstant.ConfigOption.TransferMinSize()))
                         .setDirectoryListingEnabled(true)).build();
+        log.info("GTServerFile started, listening on port: {}", port);
     }
 
     public Undertow get() {

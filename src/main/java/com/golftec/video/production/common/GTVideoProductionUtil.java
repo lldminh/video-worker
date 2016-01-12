@@ -5,6 +5,8 @@ import com.golftec.teaching.model.lesson.TelestrationVideo;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.TelestrationStatus;
 import com.google.gson.reflect.TypeToken;
+import com.jcabi.http.Request;
+import com.jcabi.http.request.JdkRequest;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -41,6 +43,7 @@ public class GTVideoProductionUtil {
         GTServerConstant.BASE_COACH_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.COACH_DIR).toString();
         GTServerConstant.DATA_PARENT_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir()).toAbsolutePath().getParent().toString();
         GTServerConstant.BASE_TELESTRATION_STATUS_DIR = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.TELESTRATION_STATUS_DIR).toString();
+        GTServerConstant.SERVER_PUBLIC_IP = queryPublicIp();
     }
 
     public static void initTelestrationStatus() {
@@ -167,7 +170,7 @@ public class GTVideoProductionUtil {
     public static String constructDownloadLink(String path) throws URISyntaxException {
 
         StringBuilder url = (new StringBuilder()).append("http://")
-                                                 .append(GTServerConstant.ConfigOption.workerFileServerHost())
+                .append(GTServerConstant.SERVER_PUBLIC_IP)
                                                  .append(":")
                                                  .append(GTServerConstant.ConfigOption.workerFileServerPort())
                                                  .append("/")
@@ -215,6 +218,19 @@ public class GTVideoProductionUtil {
             log.error("deleteTelestrationOutputLocalFile", e);
         }
         return false;
+    }
+
+    public static String queryPublicIp() {
+        try {
+            return new JdkRequest("http://checkip.amazonaws.com")
+                    .method(Request.GET)
+                    .fetch()
+                    .body()
+                    .trim();
+        } catch (IOException e) {
+            log.error("queryPublicIp", e);
+        }
+        return new String();
     }
 
 }

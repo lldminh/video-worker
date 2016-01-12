@@ -21,6 +21,7 @@ public final class GTServerConstant {
     public static final String TELESTRATION_OUT_FILE = "output.mp4";
 
     public static GTVideoProductionConfig ConfigOption;
+    public static String SERVER_PUBLIC_IP;
     public static String BASE_DATA_DIR = ConfigOption != null ? Paths.get(ConfigOption.DataDir()).toString() : "";
     public static String BASE_TELESTRATION_DATA_DIR = ConfigOption != null ? Paths.get(ConfigOption.DataDir(), TELESTRATIONS_DIR_NAME).toString() : "";
     public static String BASE_TELESTRATION_STATUS_DIR = ConfigOption != null ? Paths.get(ConfigOption.DataDir(), TELESTRATION_STATUS_DIR).toString() : "";
