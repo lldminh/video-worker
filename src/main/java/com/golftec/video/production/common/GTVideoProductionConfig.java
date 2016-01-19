@@ -13,8 +13,8 @@ import java.util.concurrent.TimeUnit;
 @Config.HotReload(value = 1, unit = TimeUnit.MINUTES)
 @LoadPolicy(LoadType.MERGE)
 @Config.Sources({
-        "file:video-production-local.properties",
-        "file:./video-production.properties",
+        "file:golftec-teaching-video-production-local.properties",
+        "file:./golftec-teaching-video-production.properties",
 })
 public interface GTVideoProductionConfig extends Config {
 
