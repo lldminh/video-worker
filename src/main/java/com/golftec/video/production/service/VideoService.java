@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
@@ -59,11 +60,19 @@ public final class VideoService {
             if (output.toFile().exists()) {
                 log.info("Copying output.mp4 {}, {}", output, finalVideoFilePath);
                 Files.copy(output, finalVideoFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+                Path video_output_path = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.TELESTRATIONS_DIR_NAME, telestrationId, GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR);
+                log.info("Delete folder video-output {}", video_output_path);
+                GTUtil.deleteFileSafely(video_output_path);
             } else {
                 final Path out = telestrationFinalVideoFolder.resolve("out.mp4");
                 if (out.toFile().exists()) {
                     log.info("Copying out.mp4 {}, {}", out, finalVideoFilePath);
                     Files.copy(out, finalVideoFilePath, StandardCopyOption.REPLACE_EXISTING);
+
+                    Path video_output_path = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.TELESTRATIONS_DIR_NAME, telestrationId, GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR);
+                    log.info("Delete folder video-output {}", video_output_path);
+                    GTUtil.deleteFileSafely(video_output_path);
                 }
             }
 

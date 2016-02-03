@@ -56,7 +56,7 @@ public class GetTelestrationStatusHandler {
 
         switch (ComposeStatus.get(status)) {
             case Succeed:
-                Path path = GTVideoProductionUtil.constructTelestrationOutputFilePath(telestrationId);
+                Path path = GTVideoProductionUtil.constructTelestrationFinalVideoFilePath(telestrationId);
                 String url = GTVideoProductionUtil.constructDownloadLink(path.toString());
                 return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsComposedSuccess.id, "TelestrationId is composed successfully.", url);
             case Fail:
