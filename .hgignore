@@ -8,3 +8,5 @@ golftec-teaching-video-production.iml
 golftec-teaching-video-production-local.properties
 compose-temp/
 logs-vpw/
+Package_video_server/
+temp-vpw/
