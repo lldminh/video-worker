@@ -1,5 +1,6 @@
 package com.golftec.video.production.networking.handler;
 
+import com.golftec.video.production.common.GTServerConstant;
 import com.golftec.video.production.common.GTVideoProductionUtil;
 import com.golftec.video.production.common.MPJsonUtils;
 import com.golftec.video.production.data.ComposeStatus;
@@ -14,6 +15,7 @@ import spark.Request;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Optional;
 
 /**
@@ -56,7 +58,7 @@ public class GetTelestrationStatusHandler {
 
         switch (ComposeStatus.get(status)) {
             case Succeed:
-                Path path = GTVideoProductionUtil.constructTelestrationFinalVideoFilePath(telestrationId);
+                Path path = Paths.get(GTServerConstant.TELESTRATIONS_DIR_NAME, telestrationId, telestrationId + ".mp4");
                 String url = GTVideoProductionUtil.constructDownloadLink(path.toString());
                 return new GetTelestrationStatusResponseData(GTResponseCode.TelestrationIsComposedSuccess.id, "TelestrationId is composed successfully.", url);
             case Fail:
