@@ -37,5 +37,8 @@ public class BaseHandlerTest extends TestCase {
 
         @POST("/golftec/map/get-telestration-status")
         GetTelestrationStatusResponseData getTelestationStatus(@Body() GetTelestrationStatusRequestData requestData);
+
+        @POST("/golftec/map/get-worker-status")
+        StatusWorkerResponseData getWorkerStatus(@Body() String defaultData);
     }
 }

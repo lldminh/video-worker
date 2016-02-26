@@ -76,4 +76,14 @@ public class DeleteTelestrationOutputHandlerTest extends BaseHandlerTest {
         clientAPI = null;
     }
 
+    @Test
+    public void test_getStatusWorker() {
+        init();
+
+        StatusWorkerResponseData responseData = clientAPI.getWorkerStatus("");
+        assertEquals(GTResponseCode.NotOk.id, responseData.code);
+
+        clientAPI = null;
+    }
+
 }
