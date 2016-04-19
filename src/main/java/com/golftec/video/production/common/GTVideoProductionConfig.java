@@ -41,4 +41,8 @@ public interface GTVideoProductionConfig extends Config {
     @Key("transfer-min-size")
     @DefaultValue("100")
     int TransferMinSize();
+
+    @Key("min-size-output-accepted")
+    @DefaultValue("10")
+    int MinSizeOutputAccepted();
 }

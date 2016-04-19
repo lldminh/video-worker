@@ -58,9 +58,12 @@ public final class VideoService {
 
             final Path output = telestrationFinalVideoFolder.resolve("output.mp4");
             if (output.toFile().exists()) {
-                log.info("Copying output.mp4 {}, {}", output, finalVideoFilePath);
-                Files.copy(output, finalVideoFilePath, StandardCopyOption.REPLACE_EXISTING);
-
+                if (output.toFile().length() > GTServerConstant.ConfigOption.MinSizeOutputAccepted()) {
+                    log.info("Copying output.mp4 {}, {}", output, finalVideoFilePath);
+                    Files.copy(output, finalVideoFilePath, StandardCopyOption.REPLACE_EXISTING);
+                } else {
+                    log.info("File size after compose about 0 bytes NOT ACCEPTED, status of this telestration will be set fail: {}", telestrationId);
+                }
                 Path video_output_path = Paths.get(GTServerConstant.ConfigOption.DataDir(), GTServerConstant.TELESTRATIONS_DIR_NAME, telestrationId, GTServerConstant.TELESTRATION_VIDEO_OUTPUT_DIR);
                 log.info("Delete folder video-output {}", video_output_path);
                 GTUtil.deleteFileSafely(video_output_path);
