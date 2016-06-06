@@ -82,6 +82,13 @@ public final class VideoService {
             if (finalVideoFilePath.toFile().exists()) {
                 log.info("DONE Composing video for telestration {}", telestrationId);
                 GTVideoProductionUtil.updateTelestrationStatus(telestrationId, ComposeStatus.Succeed.status);
+                try {
+                    log.info("Delete .wav and .json {} after composed", telestrationId);
+                    GTUtil.deleteFileSafely(GTVideoProductionUtil.constructTelestrationWavFilePath(telestrationId));
+                    GTUtil.deleteFileSafely(GTVideoProductionUtil.constructTelestrationJsonFilePath(telestrationId));
+                } catch (Exception e) {
+                    log.info("Error when delete .wav or .json {} after composed ", telestrationId);
+                }
                 ServerStatus.setFree();
                 return true;
             } else {
