@@ -4,6 +4,7 @@ import com.golftec.teaching.common.GTUtil;
 import com.golftec.teaching.model.lesson.TelestrationVideo;
 import com.golftec.video.production.data.ComposeStatus;
 import com.golftec.video.production.data.TelestrationStatus;
+import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import com.jcabi.http.Request;
 import com.jcabi.http.request.JdkRequest;
@@ -69,6 +70,42 @@ public class GTVideoProductionUtil {
         } catch (Exception e) {
             log.warn("Error while initTelestrationStatus", e);
         }
+    }
+
+    public static void clearAllWavAndJsonFileNotUse() {
+
+        File telestrationFiles = Paths.get(GTServerConstant.BASE_TELESTRATION_STATUS_DIR).toFile();
+        log.info("clearAllWavAndJsonFileNotUse: start delete all files .wav and .json from : {}", telestrationFiles.getAbsolutePath());
+        if (!telestrationFiles.exists()) {
+            // no telestration data for this lesson
+            return;
+        }
+        Files.fileTreeTraverser()
+             .children(telestrationFiles)
+             .forEach(telestrationDir -> {
+
+                 if (!telestrationDir.isDirectory()) {
+                     // don't care about file here
+                     return;
+                 }
+
+                 File telestrationMp4File = Paths.get(telestrationDir.getAbsolutePath(), telestrationDir.getName() + ".mp4").toFile();
+                 if (!telestrationMp4File.exists()) {
+                     return;
+                 }
+                 try {
+                     Path telestrationMetaFile = Paths.get(telestrationDir.getAbsolutePath(), telestrationDir.getName() + ".json");
+                     if (telestrationMetaFile.toFile().exists()) {
+                         GTUtil.deleteFileSafely(telestrationMetaFile);
+                     }
+                     Path telestrationWavFile = Paths.get(telestrationDir.getAbsolutePath(), telestrationDir.getName() + ".wav");
+                     if (telestrationWavFile.toFile().exists()) {
+                         GTUtil.deleteFileSafely(telestrationMetaFile);
+                     }
+                 } catch (Exception e) {
+                     log.error("Error when delete .wav and .json of telestration {}", telestrationDir.getName());
+                 }
+             });
     }
 
     private static void clearComposingTelestrationAfterInit() {

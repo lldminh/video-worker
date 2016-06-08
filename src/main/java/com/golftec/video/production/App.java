@@ -34,6 +34,7 @@ public class App {
 
         GTVideoProductionUtil.initAfterOptionParsed();
         GTVideoProductionUtil.initTelestrationStatus();
+        GTVideoProductionUtil.clearAllWavAndJsonFileNotUse();
 
         // start golftec socket server
         new GolftecServer(GTServerConstant.ConfigOption.TcpPort()).run().get();
