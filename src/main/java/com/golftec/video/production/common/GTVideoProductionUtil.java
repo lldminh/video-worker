@@ -100,7 +100,7 @@ public class GTVideoProductionUtil {
                      }
                      Path telestrationWavFile = Paths.get(telestrationDir.getAbsolutePath(), telestrationDir.getName() + ".wav");
                      if (telestrationWavFile.toFile().exists()) {
-                         GTUtil.deleteFileSafely(telestrationMetaFile);
+                         GTUtil.deleteFileSafely(telestrationWavFile);
                      }
                  } catch (Exception e) {
                      log.error("Error when delete .wav and .json of telestration {}", telestrationDir.getName());
