@@ -74,7 +74,7 @@ public class GTVideoProductionUtil {
 
     public static void clearAllWavAndJsonFileNotUse() {
 
-        File telestrationFiles = Paths.get(GTServerConstant.BASE_TELESTRATION_STATUS_DIR).toFile();
+        File telestrationFiles = Paths.get(GTServerConstant.BASE_TELESTRATION_DATA_DIR).toFile();
         log.info("clearAllWavAndJsonFileNotUse: start delete all files .wav and .json from : {}", telestrationFiles.getAbsolutePath());
         if (!telestrationFiles.exists()) {
             // no telestration data for this lesson
